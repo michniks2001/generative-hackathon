@@ -2,6 +2,46 @@ import OpenAI from "openai";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
+const audioFiles = [
+	{
+		length: "15 minutes",
+		embedCode: '<iframe src="https://drive.google.com/file/d/1ZTHiTs9lEpQ9X4urk40A2CGmDrWnbsLj/preview" width="640" height="480" allow="autoplay"></iframe>'
+	},
+	{
+		length: "3 minutes",
+		embedCode: '<iframe src="https://drive.google.com/file/d/1YvidjoxjwulcZozSnL3wL7najK6r6v3u/preview" width="640" height="480" allow="autoplay"></iframe>'
+	},
+	{
+		length: "8 minutes",
+		embedCode: '<iframe src="https://drive.google.com/file/d/1yaM_IyUszTpSvVgQLXT9GYLZ1TBXSlaZ/preview" width="640" height="480" allow="autoplay"></iframe>'
+	},
+	{
+		length: "20 minutes",
+		embedCode: '<iframe src="https://drive.google.com/file/d/1kRhZ77FqW6fSBJ-xF6BpgW-UMTrHGM5r/preview" width="640" height="480" allow="autoplay"></iframe>'
+	},
+	{
+		length: '5 minutes',
+		embedCode: '<iframe src="https://drive.google.com/file/d/1hOziUfUqsteyw3-ry-rJFcz9OffQq_3u/preview" width="640" height="480" allow="autoplay"></iframe>'
+	},
+	{
+		length: '10 minutes',
+		embedCode: '<iframe src="https://drive.google.com/file/d/1T90L7ZtyO6oFrurFwo1Ke3v-2imLeBPi/preview" width="640" height="480" allow="autoplay"></iframe>'
+	},
+	{
+		length: '7 minutes',
+		embedCode: '<iframe src="https://drive.google.com/file/d/17ilQ5Pv3kcORJSZybWa1gazyM5CMqdwn/preview" width="640" height="480" allow="autoplay"></iframe>'
+	},
+	{
+		length: '4 minutes',
+		embedCode: '<iframe src="https://drive.google.com/file/d/1MSjsjiTjenCt2W5tZsEgsGTnO5VpalVa/preview" width="640" height="480" allow="autoplay"></iframe>'
+	},
+	{
+		length: '10 minutes',
+		embedCode: '<iframe src="https://drive.google.com/file/d/19ght3L31tO7YhknFSnW00LlXIlpeKelo/preview" width="640" height="480" allow="autoplay"></iframe>'
+	}
+
+]
+
 export async function POST(req) {
 	try {
 		const { mood } = await req.json();
