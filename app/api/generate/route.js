@@ -41,7 +41,7 @@ const audioFiles = [
 	}
 ]
 
-games = [
+const games = [
 	"https://cloud.onlinegames.io/games/2025/unity/voxel-world/index-og.html",
 	"https://www.onlinegames.io/games/2023/q2/dinosaur-game/index.html",
 	"https://www.onlinegames.io/games/2023/unity/hero-rush-tower-defense/index.html",
@@ -51,8 +51,8 @@ games = [
 
 const make_prompt = (args) => {
 
-	return `You are a frontend assistant using html and css. You will generate a user interface 
-	depending on how the user is feeling with different quotes, exercises, and games using html and inline css styles. 
+	return `You are a frontend assistant using nextjs with tailwindcss. You will generate a user interface 
+	depending on how the user is feeling with different quotes, exercises, and games using jsx and tailwindcss styles. 
 	create a grid with 4 different components. 
 	
 	Component examples are: a heading that responds to the person's mood, a 
@@ -83,9 +83,8 @@ export async function POST(req) {
 			max_tokens: 500,
 		});
 
-		const generatedCode = response.choices[0].message.content.replace('```html', '').replace('```', '');
+		const generatedCode = response.choices[0].message.content.replace('```jsx', '').replace('```', '');
 
-		console.log(generatedCode)
 		return Response.json({ generatedCode });
 	} catch (error) {
 		console.error("OpenAI API error:", error);
