@@ -39,7 +39,14 @@ const audioFiles = [
 		length: '10 minutes',
 		embedCode: '<iframe src="https://drive.google.com/file/d/19ght3L31tO7YhknFSnW00LlXIlpeKelo/preview" width="640" height="480" allow="autoplay"></iframe>'
 	}
+]
 
+games = [
+	"https://cloud.onlinegames.io/games/2025/unity/voxel-world/index-og.html",
+	"https://www.onlinegames.io/games/2023/q2/dinosaur-game/index.html",
+	"https://www.onlinegames.io/games/2023/unity/hero-rush-tower-defense/index.html",
+	"https://www.onlinegames.io/games/2023/unity/hero-rush-tower-defense/index.html",
+	"https://www.onlinegames.io/games/2023/construct/234/among-impostor/index.html"
 ]
 
 export async function POST(req) {
