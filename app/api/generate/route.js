@@ -1,4 +1,4 @@
-import OpenAI from "openai";
+/* import OpenAI from "openai";
 
 console.log(process.env.OPENAI_API_KEY)
 const openai = new OpenAI({
@@ -60,6 +60,36 @@ export async function POST(req) {
 			status: 500,
 			headers: { "Content-Type": "application/json" },
 		});
+	}
+}
+*/
+
+
+// app/api/generate/route.js
+import OpenAI from "openai";
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+export async function POST(req) {
+	try {
+		const { mood } = await req.json();
+
+		const response = await openai.chat.completions.create({
+			model: "gpt-4o",
+			messages: [
+				{ role: "system", content: "You are a frontend assistant using HTML/CSS. Generate HTML with styles based on user mood. Only provide the generated code, no explanations." },
+				{ role: "user", content: `I am feeling ${mood}` },
+			],
+			temperature: 0.7,
+			max_tokens: 500,
+		});
+
+		const generatedCode = response.choices[0].message.content.replace('```jsx', '').replace('```', '');
+		console.log(generatedCode)
+		return Response.json({ generatedCode });
+	} catch (error) {
+		console.error("OpenAI API error:", error);
+		return Response.json({ message: "Failed to generate UI." }, { status: 500 });
 	}
 }
 
