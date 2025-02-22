@@ -7,8 +7,10 @@ import { Input } from "@/components/ui/input";
 const MoodUI = () => {
   const [mood, setMood] = useState("");
   const [generatedUI, setGeneratedUI] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const callBE = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
@@ -27,6 +29,7 @@ const MoodUI = () => {
     } catch (error) {
       console.error("Error:", error);
     }
+    setIsLoading(false);
   };
 
   const handleKeyPress = async (e) => {
@@ -46,14 +49,18 @@ const MoodUI = () => {
       <Card className="w-full max-w-md">
         <CardContent className="p-6 space-y-4">
           <h2 className="text-2xl font-semibold text-center mb-4">How are you feeling?</h2>
-          <Input
+          {
+            isLoading ? 
+            <div>loading...</div>
+            : <Input
             type="text"
             placeholder="Describe your mood..."
             value={mood}
             onChange={(e) => setMood(e.target.value)}
             onKeyPress={handleKeyPress}
             className="w-full p-2 rounded-lg"
-          />
+            />
+          }
         </CardContent>
       </Card>
     </div>
