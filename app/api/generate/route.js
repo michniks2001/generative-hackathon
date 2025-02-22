@@ -77,14 +77,15 @@ export async function POST(req) {
 		const response = await openai.chat.completions.create({
 			model: "gpt-4o",
 			messages: [
-				{ role: "system", content: "You are a frontend assistant using HTML/CSS. Generate HTML with styles based on user mood. Only provide the generated code, no explanations." },
+				{ role: "system", content: "You are a frontend assistant using HTML/CSS. Generate a div with inline css styles based on user mood. Only provide the generated code, no explanations. Just output raw code (no markdown)" },
 				{ role: "user", content: `I am feeling ${mood}` },
 			],
 			temperature: 0.7,
 			max_tokens: 500,
 		});
 
-		const generatedCode = response.choices[0].message.content.replace('```jsx', '').replace('```', '');
+		const generatedCode = response.choices[0].message.content.replace('```html', '').replace('```', '');
+		
 		console.log(generatedCode)
 		return Response.json({ generatedCode });
 	} catch (error) {
