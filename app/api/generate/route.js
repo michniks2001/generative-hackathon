@@ -77,7 +77,14 @@ export async function POST(req) {
 		const response = await openai.chat.completions.create({
 			model: "gpt-4o",
 			messages: [
-				{ role: "system", content: "You are a frontend assistant using HTML/CSS. Generate a div with inline css styles based on user mood. Only provide the generated code, no explanations. Just output raw code (no markdown)" },
+				{
+					role: "system", content:
+						```You are a frontend assistant using html and css. You will generate a user interface depending on how the user is feeling with different quotes, exercises, and games using html and inline css styles.
+
+						create a grid with 4 different components. Component examples are: a heading that responds to the person's mood, a textbox for the user to write down their thoughts, a chatbot that the user can interact with and seek more advice, a meditation exercise the user can do to maybe redirect their focus, etc.
+
+						only provide the code with no other messages or formatting.```
+				},
 				{ role: "user", content: `I am feeling ${mood}` },
 			],
 			temperature: 0.7,
@@ -85,7 +92,7 @@ export async function POST(req) {
 		});
 
 		const generatedCode = response.choices[0].message.content.replace('```html', '').replace('```', '');
-		
+
 		console.log(generatedCode)
 		return Response.json({ generatedCode });
 	} catch (error) {
