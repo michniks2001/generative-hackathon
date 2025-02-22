@@ -1,29 +1,65 @@
-import { StreamingTextResponse, LangChainStream } from 'ai';
+import OpenAI from "openai";
+
+console.log(process.env.OPENAI_API_KEY)
+const openai = new OpenAI({
+	apiKey: process.env.OPENAI_API_KEY,
+});
 
 export const runtime = 'edge';
 
 export async function POST(req) {
-	const { prompt } = await req.json();
+	try {
+		const { mood } = await req.json();
 
-	const response = await fetch('https://api.openai.com/v1/chat/completions', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-		},
-		body: JSON.stringify({
-			model: 'gpt-4-o',
-			max_tokens: 1024,
+		if (!mood) {
+			return new Response(JSON.stringify({ error: "Mood is required." }), {
+				status: 400,
+				headers: { "Content-Type": "application/json" },
+			});
+		}
+
+		const response = await openai.chat.completions.create({
+			model: "gpt-4o",
 			messages: [
 				{
-					role: 'user',
-					content: `Generate JSX for: ${prompt.msg}. Only return the JSX code, no explanations.`
+					role: "system",
+					content: [
+						{
+							type: "text",
+							text: "You are a frontend assistant using Next.js. You will generate a user interface depending on how the user is feeling with different quotes, exercises, and games using JSX with Tailwind and ShadCN.\n\nOnly provide the code with no other messages or formatting."
+						}
+					]
+				},
+				{
+					role: "user",
+					content: [
+						{
+							type: "text",
+							text: `I am feeling ${mood}`
+						}
+					]
 				}
 			],
-			stream: true,
-		}),
-	});
+			response_format: { type: "text" },
+			temperature: 1,
+			max_tokens: 2048,
+			top_p: 1,
+			frequency_penalty: 0,
+			presence_penalty: 0
+		});
 
-	const stream = LangChainStream(response);
-	return new StreamingTextResponse(stream);
+		const generatedCode = response.choices?.[0]?.message?.content?.trim();
+
+		return new Response(JSON.stringify({ code: generatedCode }), {
+			status: 200,
+			headers: { "Content-Type": "application/json" },
+		});
+	} catch (error) {
+		console.error("Error generating code:", error);
+		return new Response(JSON.stringify({ error: "Failed to generate JSX code." }), {
+			status: 500,
+			headers: { "Content-Type": "application/json" },
+		});
+	}
 }
+

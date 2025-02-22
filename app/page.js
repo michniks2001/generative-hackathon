@@ -3,9 +3,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { POST } from './api/generate/route';
-
-
+import { useEffect } from 'react';
 const getMoodStyles = (mood) => {
   // Convert mood to lowercase for comparison
   const lowerMood = mood.toLowerCase();
@@ -37,20 +35,41 @@ const MoodUI = () => {
   const [mood, setMood] = useState('');
   const [inputStyles, setInputStyles] = useState('bg-white');
 
-  useEffect( () => {
-    fetchData = async () => {
-      let res = await POST({'msg': 'hi'});
-      console.log(res);
+  const callBE = async () => {
+    try {
+      const response = await fetch('api/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          mood: mood,
+        })
+      })
 
+      if (!response.ok) {
+        throw new Error('Failed to fetch')
+      }
+
+      const data = await response.json()
+      console.log('Response:', data)
+    } catch (error) {
+      console.error('Error:', error)
     }
-    fetchData();
-  }, [])
+  }
 
   const handleMoodChange = (e) => {
     const newMood = e.target.value;
     setMood(newMood);
     setInputStyles(getMoodStyles(newMood));
   };
+
+  const handleKeyPress = async (e) => {
+    if (e.key === 'Enter') {
+      console.log('Submitting mood:', mood)
+      await callBE()
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-8 flex items-center justify-center">
@@ -62,6 +81,7 @@ const MoodUI = () => {
             placeholder="Describe your mood..."
             value={mood}
             onChange={handleMoodChange}
+            onKeyPress={handleKeyPress}
             className="w-full p-2 rounded-lg"
           />
           <div className="text-center mt-4">
