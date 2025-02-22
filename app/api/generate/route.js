@@ -63,6 +63,7 @@ const make_prompt = (args) => {
 		negativity_score: int,
 		meditation_audio: null if negativity_score < 3 else string,
 		video_game: null if negativity_score >= 3 else string,
+		summary_of_state: string, // this is you summarizing how the client is feeling
 		motivational_quote: string,
 	}
 	`;
@@ -85,7 +86,7 @@ export async function POST(req) {
     });
 
     const generatedCode = response.choices[0].message.content
-      .replace("```jsx", "")
+      .replace("```json", "")
       .replace("```", "");
 
     return Response.json({ generatedCode });
