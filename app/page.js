@@ -2,12 +2,17 @@
 
 import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
+// import * as Babel from "@babel/standalone";
 import { Input } from "@/components/ui/input";
+import JsxParser from 'react-jsx-parser'
+
 
 const MoodUI = () => {
   const [mood, setMood] = useState("");
   const [generatedUI, setGeneratedUI] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const [Comp, setComp] = useState(null);
 
   const callBE = async () => {
     setIsLoading(true);
@@ -25,7 +30,8 @@ const MoodUI = () => {
       }
 
       const data = await response.json();
-      setGeneratedUI(data.generatedCode);
+      // setGeneratedUI(data.generatedCode);
+      setJsxInput(data.generatedCode);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -34,16 +40,23 @@ const MoodUI = () => {
 
   const handleKeyPress = async (e) => {
     if (e.key === "Enter") {
-      await callBE();
+      // await callBE();
+      setComp(generateJsx("<h1> test </h1>"))
     }
   };
 
   return (
     <div className="transition-all duration-300 ease-in-out min-h-screen bg-gray-50 p-8 flex flex-col items-center justify-center">
       <div>
-      {generatedUI ? (
+      {/* {generatedUI ? (
         <div dangerouslySetInnerHTML={{ __html: generatedUI }} />
       ) : <div/>
+      } */}
+
+      {
+        Comp ? 
+          <Comp/> :
+          <div/>
       }
       </div>
       <Card className="w-full max-w-md">
