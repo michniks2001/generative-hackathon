@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { POST } from './api/generate/route';
+
 
 const getMoodStyles = (mood) => {
   // Convert mood to lowercase for comparison
@@ -34,6 +36,15 @@ const getMoodStyles = (mood) => {
 const MoodUI = () => {
   const [mood, setMood] = useState('');
   const [inputStyles, setInputStyles] = useState('bg-white');
+
+  useEffect( () => {
+    fetchData = async () => {
+      let res = await POST({'msg': 'hi'});
+      console.log(res);
+
+    }
+    fetchData();
+  }, [])
 
   const handleMoodChange = (e) => {
     const newMood = e.target.value;

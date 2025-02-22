@@ -17,7 +17,7 @@ export async function POST(req) {
 			messages: [
 				{
 					role: 'user',
-					content: `Generate JSX for: ${prompt}. Only return the JSX code, no explanations.`
+					content: `Generate JSX for: ${prompt.msg}. Only return the JSX code, no explanations.`
 				}
 			],
 			stream: true,
